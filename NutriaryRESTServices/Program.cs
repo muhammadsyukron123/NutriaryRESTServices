@@ -32,6 +32,8 @@ builder.Services.AddScoped<INutrition, NutritionData>();
 builder.Services.AddScoped<INutritionBLL, FoodNutritionBLL>();
 builder.Services.AddScoped<IConsumptionReport, ConsumptionReportData>();
 builder.Services.AddScoped<IConsumptionReportBLL, ConsumptionReportBLL>();
+builder.Services.AddScoped<IUserProfileBLL, UserProfileBLL>();
+builder.Services.AddScoped<IUserProfile, UserProfileData>();
 
 builder.Services.AddSwaggerGen(c =>
 {
