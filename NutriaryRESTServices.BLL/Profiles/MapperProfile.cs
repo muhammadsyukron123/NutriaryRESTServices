@@ -23,6 +23,8 @@ namespace NutriaryRESTServices.BLL.Profiles
             CreateMap<DailyLog, DailyLogDTO>().ReverseMap();
             CreateMap<FoodNutritionInfo, FoodNutritionInfoDTO>().ReverseMap();
             CreateMap<TotalNutritionReport, TotalNutritionReportDTO>();
+            CreateMap<UserProfileWithCalorieInformation, UserProfileWithCalorieDTO>().ReverseMap();
+            CreateMap<UserProfile, GetUserProfileDTO>().ReverseMap();
 
 
 

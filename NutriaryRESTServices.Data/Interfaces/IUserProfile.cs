@@ -11,8 +11,8 @@ namespace NutriaryRESTServices.Data.Interfaces
     {
         public Task<IEnumerable<UserProfile>> GetAllUserProfiles();
         public Task<UserProfile> GetUserProfileById(int userId);
-        public Task<UserProfile> InsertUserProfile(UserProfile userProfile);
-        public Task<UserProfile> UpdateUserProfile(UserProfile userProfile);
+        public Task<Task> InsertUserProfile(UserProfileWithCalorieInformation userProfile);
+        public Task<Task> UpdateUserProfile(UserProfileWithCalorieInformation userProfile);
         public Task<bool> DeleteUserProfile(int userId);
     }
 }
