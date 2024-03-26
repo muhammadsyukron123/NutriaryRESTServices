@@ -1,10 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NutriaryRESTServices.BLL.DTOs;
 using NutriaryRESTServices.BLL.Interfaces;
+using NutriaryRESTServices.Domain;
+using NutriaryRESTServices.Helpers;
+using System.Security.Claims;
 
 namespace NutriaryRESTServices.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ConsumptionLogController : ControllerBase
@@ -21,6 +26,12 @@ namespace NutriaryRESTServices.Controllers
         {
             try
             {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+                if (userIdClaim == null && userIdClaim.Value != UserId.ToString())
+
+                {
+                    return Forbid();
+                }
                 var logs = await _consumptionLogBLL.GetAllConsumptionLogsById(UserId, LogDate);
                 return Ok(logs);
             }
@@ -49,6 +60,12 @@ namespace NutriaryRESTServices.Controllers
         {
             try
             {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+                if (userIdClaim == null && userIdClaim.Value != daily.UserId.ToString())
+
+                {
+                    return Forbid();
+                }
                 var result = await _consumptionLogBLL.InsertConsumptionLog(daily);
                 return Ok(result);
             }

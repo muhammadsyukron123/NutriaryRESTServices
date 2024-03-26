@@ -15,12 +15,14 @@ namespace NutriaryRESTServices.BLL.Profiles
         {
             CreateMap<User, UserWithProfileDTO>();
             CreateMap<User, UserDTO>().ReverseMap();
+            CreateMap<UserCreateDTO, User>().ReverseMap();
             CreateMap<UserWithProfile, UserWithProfileDTO>().ReverseMap();
             //CreateMap<DailyLogDetails, DailyLogDetailsDTO>().ReverseMap();
             CreateMap<DailyLogDetails, DailyLogDetailsDTO>()
                 .ForMember(dest => dest.LogDate, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.LogDate)));
             CreateMap<DailyLog, DailyLogDTO>().ReverseMap();
             CreateMap<FoodNutritionInfo, FoodNutritionInfoDTO>().ReverseMap();
+            CreateMap<TotalNutritionReport, TotalNutritionReportDTO>();
 
 
 

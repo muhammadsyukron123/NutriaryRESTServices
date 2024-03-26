@@ -29,9 +29,21 @@ namespace NutriaryRESTServices.Data
             throw new NotImplementedException();
         }
 
-        public Task<User> GetUserById(int userId)
+        public async Task<User> GetUserById(int userId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
+                if (user == null)
+                {
+                    throw new ArgumentException("User not found");
+                }
+                return user;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("User not found", ex.Message);
+            }
         }
 
         public async Task<User> GetUserByUsername(string username)
@@ -93,9 +105,35 @@ namespace NutriaryRESTServices.Data
             }
         }
 
-        public Task<User> InsertUser(User user)
+        public async Task<User> InsertUser(User users)
         {
-            throw new NotImplementedException();
+            try
+            {
+                
+                var parameter = new SqlParameter[]
+                {
+                    new SqlParameter("@username", users.Username),
+                    new SqlParameter("@email", users.Email),
+                    new SqlParameter("@password", users.Password),
+                    new SqlParameter("@firstname", users.Firstname),
+                    new SqlParameter("@lastname", users.Lastname)
+                };
+                var register = await _context.Database.ExecuteSqlRawAsync("EXEC usp_RegisterUser @username, @email, @password, @firstname, @lastname", parameter);
+
+                var user = new User
+                {
+                    Username = users.Username,
+                    Email = users.Email,
+                    Password = users.Password,
+                    Firstname = users.Firstname,
+                    Lastname = users.Lastname
+                };
+                return user;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("User not found", ex.Message);
+            }
         }
 
         public async Task<User> Login(string username, string password)
@@ -121,9 +159,18 @@ namespace NutriaryRESTServices.Data
             }
         }
 
-        public Task<User> UpdateUser(User user)
+        public async Task<User> UpdateUser(User user)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
+                return user;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("User not found", ex.Message);
+            }
         }
     }
 }

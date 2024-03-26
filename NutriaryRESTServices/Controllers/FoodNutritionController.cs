@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NutriaryRESTServices.BLL.DTOs;
 using NutriaryRESTServices.BLL.Interfaces;
+using NutriaryRESTServices.Helpers;
 
 namespace NutriaryRESTServices.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class FoodNutritionController : ControllerBase

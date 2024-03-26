@@ -2,6 +2,7 @@
 using NutriaryRESTServices.BLL.DTOs;
 using NutriaryRESTServices.BLL.Interfaces;
 using NutriaryRESTServices.Data.Interfaces;
+using NutriaryRESTServices.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,13 @@ namespace NutriaryRESTServices.BLL
             _userData = userData;
             _mapper = mapper;
         }
+
+        public async Task<UserDTO> GetUserById(int userId)
+        {
+            var user = await _userData.GetUserById(userId);
+            return _mapper.Map<UserDTO>(user);
+        }
+
         public async Task<UserDTO> GetUserByUsername(string Username)
         {
             var user = await _userData.GetUserByUsername(Username);
@@ -33,10 +41,24 @@ namespace NutriaryRESTServices.BLL
             return _mapper.Map<UserWithProfileDTO>(user);
         }
 
+        public async Task<UserDTO> InsertUser(UserCreateDTO userCreateDTO)
+        {
+            var user = _mapper.Map<User>(userCreateDTO);
+            var insertedUser = await _userData.InsertUser(user);
+            return _mapper.Map<UserDTO>(insertedUser);
+        }
+
         public async Task<UserDTO> Login(string Username, string Password)
         {
             var user = await _userData.Login(Username, Password);
             return _mapper.Map<UserDTO>(user);
+        }
+
+        public async Task<UserDTO> UpdateUser(UserDTO userDTO)
+        {
+            var user = _mapper.Map<User>(userDTO);
+            var updatedUser = await _userData.UpdateUser(user);
+            return _mapper.Map<UserDTO>(updatedUser);
         }
     }
 }

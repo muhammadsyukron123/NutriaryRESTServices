@@ -111,6 +111,7 @@ public partial class AppDbContext : DbContext
         modelBuilder.Entity<UserWithProfile>().HasKey(b => b.UserId);
 
         modelBuilder.Entity<DailyLogDetails>().HasKey(l => l.UserId);
+        modelBuilder.Entity<TotalNutritionReport>().HasKey(r => r.UserId);
 
         OnModelCreatingPartial(modelBuilder);
     }
