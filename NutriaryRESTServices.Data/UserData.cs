@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using NutriaryRESTServices.Data.Interfaces;
+using NutriaryRESTServices.Data.Models;
 using NutriaryRESTServices.Domain;
 using NutriaryRESTServices.Models;
 using System;
@@ -20,19 +21,15 @@ namespace NutriaryRESTServices.Data
             _context = appDbContext;
         }
 
-        public async Task<bool> ChangePassword(int userId, string oldPassword, string newPassword, string confirmPassword)
+        public async Task<ChangePasswordResult> ChangePassword(int userId, string oldPassword, string newPassword, string confirmPassword)
         {
             try
             {
-                var parameter = new SqlParameter[]
-                {
-                    new SqlParameter("@user_id", userId),
-                    new SqlParameter("@old_password", oldPassword),
-                    new SqlParameter("@new_password", newPassword),
-                    new SqlParameter("@confirm_password", confirmPassword)
-                };
-                var result = await _context.Database.ExecuteSqlRawAsync("EXEC usp_ChangePasswordByUserId @user_id, @old_password, @new_password, @confirm_password", parameter);
-                return true;
+                var result = await _context.Database
+                    .SqlQueryRaw<ChangePasswordResult>("EXEC usp_ChangePasswordByUserId {0}, {1}, {2}, {3}", userId, oldPassword, newPassword, confirmPassword)
+                    .ToListAsync();
+
+                return result.FirstOrDefault();
             }
             catch (Exception ex)
             {

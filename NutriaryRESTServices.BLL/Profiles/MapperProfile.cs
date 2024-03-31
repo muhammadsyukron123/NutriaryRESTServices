@@ -27,6 +27,7 @@ namespace NutriaryRESTServices.BLL.Profiles
             CreateMap<UserProfileWithCalorieInformation, UserProfileWithCalorieDTO>().ReverseMap();
             CreateMap<UserProfile, GetUserProfileDTO>().ReverseMap();
             CreateMap<CalorieSummary, CalorieSummaryDTO>();
+            CreateMap<ChangePasswordResult, ChangePasswordResultDTO>();
 
 
 

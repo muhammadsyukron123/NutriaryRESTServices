@@ -11,7 +11,9 @@ namespace NutriaryRESTServices.BLL.DTOs
     public class UserCreateDTO
     {
         public int UserId { get; set; }
+
         public string Username { get; set; } = null!;
+        [EmailAddress]
         public string Email { get; set; } = null!;
         public string Password { get; set; } = null!;
         [NotMapped]

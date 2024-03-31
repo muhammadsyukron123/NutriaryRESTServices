@@ -1,4 +1,5 @@
 ﻿
+using NutriaryRESTServices.Data.Models;
 using NutriaryRESTServices.Domain;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace NutriaryRESTServices.Data.Interfaces
         public Task<User> GetUserByUsername(string username);
         public Task<User> InsertUser(User user);
         public Task<User> UpdateUser(User user);
-        public Task<bool> ChangePassword(int userId, string oldPassword, string newPassword, string confirmPassword);
+        public Task<ChangePasswordResult> ChangePassword(int userId, string oldPassword, string newPassword, string confirmPassword);
         public Task<bool> DeleteUser(int userId);
         public Task<UserWithProfile> GetUserWithProfile(int userId);
         public Task<User> Login(string username, string password);

@@ -15,7 +15,7 @@ namespace NutriaryRESTServices.BLL.Interfaces
         public Task<UserWithProfileDTO> GetUserWithProfile(int UserId);
         public Task<UserDTO> GetUserById(int userId);
         public Task<UserDTO> InsertUser(UserCreateDTO userCreateDTO);
-        public Task<bool> ChangePassword(int userId, string oldPassword, string newPassword, string confirmPassword);
+        public Task<ChangePasswordResultDTO> ChangePassword(int userId, string oldPassword, string newPassword, string confirmPassword);
         public Task<UserDTO> UpdateUser(UserDTO userDTO);
 
     }

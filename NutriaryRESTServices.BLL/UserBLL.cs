@@ -22,9 +22,10 @@ namespace NutriaryRESTServices.BLL
             _mapper = mapper;
         }
 
-        public async Task<bool> ChangePassword(int userId, string oldPassword, string newPassword, string confirmPassword)
+        public async Task<ChangePasswordResultDTO> ChangePassword(int userId, string oldPassword, string newPassword, string confirmPassword)
         {
-            return await _userData.ChangePassword(userId, oldPassword, newPassword, confirmPassword);
+            var result = await _userData.ChangePassword(userId, oldPassword, newPassword, confirmPassword);
+            return _mapper.Map<ChangePasswordResultDTO>(result);
         }
 
         public async Task<UserDTO> GetUserById(int userId)

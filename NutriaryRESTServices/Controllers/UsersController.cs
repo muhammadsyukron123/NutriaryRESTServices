@@ -189,6 +189,10 @@ namespace NutriaryRESTServices.Controllers
             try
             {
                 var result = await _userBLL.ChangePassword(changePasswordDTO.UserId, changePasswordDTO.oldPassword, changePasswordDTO.newPassword, changePasswordDTO.confirmPassword);
+                if (result == null)
+                {
+                    return BadRequest("Failed to change password");
+                }
                 return Ok($"Password changed successfully");
             }
             catch (Exception ex)
