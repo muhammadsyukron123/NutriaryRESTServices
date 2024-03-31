@@ -9,7 +9,7 @@ using System.Security.Claims;
 
 namespace NutriaryRESTServices.Controllers
 {
-    [Authorize]
+    
     [Route("api/[controller]")]
     [ApiController]
     public class ConsumptionLogController : ControllerBase
@@ -21,17 +21,19 @@ namespace NutriaryRESTServices.Controllers
             _consumptionLogBLL = consumptionLogBLL;
         }
 
+        [Authorize]
         [HttpGet("GetAllConsumptionLogsById")]
         public async Task<IActionResult> GetAllConsumptionLogsById(int UserId, DateTime LogDate)
         {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null || userIdClaim.Value != UserId.ToString())
+
+            {
+                return Forbid();
+            }
             try
             {
-                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-                if (userIdClaim == null && userIdClaim.Value != UserId.ToString())
-
-                {
-                    return Forbid();
-                }
+                
                 var logs = await _consumptionLogBLL.GetAllConsumptionLogsById(UserId, LogDate);
                 return Ok(logs);
             }
@@ -41,6 +43,7 @@ namespace NutriaryRESTServices.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("DeleteConsumptionLog")]
         public async Task<IActionResult> DeleteConsumptionLog(int LogId)
         {
@@ -55,17 +58,18 @@ namespace NutriaryRESTServices.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost("InsertConsumptionLog")]
         public async Task<IActionResult> InsertConsumptionLog(DailyLogDTO daily)
         {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null || userIdClaim.Value != daily.UserId.ToString())
+
+            {
+                return Forbid();
+            }
             try
             {
-                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-                if (userIdClaim == null && userIdClaim.Value != daily.UserId.ToString())
-
-                {
-                    return Forbid();
-                }
                 var result = await _consumptionLogBLL.InsertConsumptionLog(daily);
                 return Ok(result);
             }
@@ -75,6 +79,7 @@ namespace NutriaryRESTServices.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut("UpdateConsumptionQuantity")]
         public async Task<IActionResult> UpdateConsumptionQuantity(ConsumptionLogUpdateDTO consumptionLogUpdateDTO)
         {

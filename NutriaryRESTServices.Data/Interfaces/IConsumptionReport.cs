@@ -1,4 +1,5 @@
-﻿using NutriaryRESTServices.Domain;
+﻿using NutriaryRESTServices.Data.Models;
+using NutriaryRESTServices.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,7 @@ namespace NutriaryRESTServices.Data.Interfaces
     {
         public Task<TotalNutritionReport> GetTotalNutritionToday(int userId);
         public Task<TotalNutritionReport> GetTotalNutritionByDate(int userId, DateTime date);
+        public Task<CalorieSummary> GetCalorieSummaryToday(int userId);
+        public Task<CalorieSummary> GetCalorieSummaryByDate(int userId, DateTime date);
     }
 }

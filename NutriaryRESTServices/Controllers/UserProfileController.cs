@@ -8,7 +8,6 @@ using System.Security.Claims;
 
 namespace NutriaryRESTServices.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserProfileController : ControllerBase
@@ -20,17 +19,19 @@ namespace NutriaryRESTServices.Controllers
             _userProfileBLL = userProfileBLL;
         }
 
+        [Authorize]
         [HttpGet("GetUserProfile")]
         public async Task<IActionResult> GetUserProfile(int UserId)
         {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null || userIdClaim.Value != UserId.ToString())
+
+            {
+                return Forbid();
+            }
             try
             {
-                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-                if (userIdClaim == null && userIdClaim.Value != UserId.ToString())
-
-                {
-                    return Forbid();
-                }
+                
                 var result = await _userProfileBLL.GetUserProfileById(UserId);
                 if (result == null)
                 {
@@ -50,7 +51,7 @@ namespace NutriaryRESTServices.Controllers
             try
             {
                 var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-                if (userIdClaim == null && userIdClaim.Value != userProfile.UserId.ToString())
+                if (userIdClaim == null || userIdClaim.Value != userProfile.UserId.ToString())
 
                 {
                     return Forbid();
@@ -74,7 +75,7 @@ namespace NutriaryRESTServices.Controllers
             try
             {
                 var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-                if (userIdClaim == null && userIdClaim.Value != userProfile.UserId.ToString())
+                if (userIdClaim == null || userIdClaim.Value != userProfile.UserId.ToString())
 
                 {
                     return Forbid();

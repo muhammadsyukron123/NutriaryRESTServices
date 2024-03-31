@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -8,6 +9,7 @@ using NutriaryRESTServices.Data;
 using NutriaryRESTServices.Data.Interfaces;
 using NutriaryRESTServices.Helpers;
 using NutriaryRESTServices.Models;
+using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -87,16 +89,22 @@ builder.Services.AddAuthentication(options =>
 });
 
 //add UserIdMatch policy for authorization for user who the userid is stored to the claim
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("UserIdMatch", policy =>
+    {
+        policy.Requirements.Add(new UserIdMatchRequirement());
+    });
+});
+builder.Services.AddSingleton<IAuthorizationHandler, UserIdMatchHandler>();
 
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 

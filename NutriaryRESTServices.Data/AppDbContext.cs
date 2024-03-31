@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using NutriaryRESTServices.Domain;
 
 namespace NutriaryRESTServices.Models;
@@ -37,9 +38,12 @@ public partial class AppDbContext : DbContext
 
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=.\\BSISQLEXPRESS;Initial Catalog=NutriaryDatabase;Integrated Security=True;TrustServerCertificate=True;");
-
+    {
+        //get connection string from appsettings.json
+        base.OnConfiguring(optionsBuilder);
+        //\\BSISQLEXPRESS
+        optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=NutriaryDatabase;Integrated Security=True;TrustServerCertificate=True;");
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<ActivityLevel>(entity =>

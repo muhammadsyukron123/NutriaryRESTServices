@@ -7,7 +7,7 @@ using NutriaryRESTServices.Helpers;
 
 namespace NutriaryRESTServices.Controllers
 {
-    [Authorize]
+
     [Route("api/[controller]")]
     [ApiController]
     public class FoodNutritionController : ControllerBase
@@ -60,7 +60,7 @@ namespace NutriaryRESTServices.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
-
+        [Authorize]
         [HttpPost("InsertFoodNutritionInfo")]
         public async Task<IActionResult> InsertFoodNutritionInfo(FoodNutritionInfoDTO foodNutritionInfoDTO)
         {
@@ -74,7 +74,7 @@ namespace NutriaryRESTServices.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
-
+        [Authorize]
         [HttpPut("UpdateFoodNutritionInfo")]
         public async Task<IActionResult> UpdateFoodNutritionInfo(FoodNutritionInfoDTO foodNutritionInfoDTO)
         {
@@ -88,7 +88,7 @@ namespace NutriaryRESTServices.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
-
+        [Authorize]
         [HttpDelete("DeleteFoodNutritionInfo")]
         public async Task<IActionResult> DeleteFoodNutritionInfo(string foodId)
         {

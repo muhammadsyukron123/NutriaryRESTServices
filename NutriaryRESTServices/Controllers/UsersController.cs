@@ -35,7 +35,7 @@ namespace NutriaryRESTServices.Controllers
             try
             {
                 var userNameClaim = User.FindFirst(ClaimTypes.Name);
-                if (userNameClaim == null && userNameClaim.Value != Username.ToString())
+                if (userNameClaim == null || userNameClaim.Value != Username.ToString())
 
                 {
                     return Forbid();
@@ -57,14 +57,14 @@ namespace NutriaryRESTServices.Controllers
         [HttpGet("GetWithProfile")]
         public async Task<IActionResult> GetUserWithProfile(int UserId)
         {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null || userIdClaim.Value != UserId.ToString())
+
+            {
+                return Forbid();
+            }
             try
             {
-                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-                if (userIdClaim == null && userIdClaim.Value != UserId.ToString())
-
-                {
-                    return Forbid();
-                }
                 var user = await _userBLL.GetUserWithProfile(UserId);
                 return Ok(user);
             }
@@ -84,15 +84,19 @@ namespace NutriaryRESTServices.Controllers
                 {
                     return NotFound();
                 }
-                List<Claim> claims = new List<Claim>();
-                claims.Add(new Claim(ClaimTypes.Name, result.Username));
-                claims.Add(new Claim(ClaimTypes.NameIdentifier, result.UserId.ToString()));
+                List<Claim> claims = new List<Claim>()
+                {
+                    new Claim(ClaimTypes.Name, result.Username),
+                    new Claim(ClaimTypes.NameIdentifier, result.UserId.ToString())
+                };
+                //claims.Add();
+                //claims.Add(new Claim(ClaimTypes.NameIdentifier, result.UserId.ToString()));
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(claims),
-                    Expires = DateTime.UtcNow.AddHours(1),
+                    Expires = DateTime.UtcNow.AddDays(30),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
                 };
                 var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -133,7 +137,7 @@ namespace NutriaryRESTServices.Controllers
             try
             {
                 var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-                if (userIdClaim == null && userIdClaim.Value != userDTO.UserId.ToString())
+                if (userIdClaim == null || userIdClaim.Value != userDTO.UserId.ToString())
 
                 {
                     return Forbid();
@@ -151,20 +155,41 @@ namespace NutriaryRESTServices.Controllers
         [HttpGet("GetUserById")]
         public async Task<IActionResult> GetUserById(int UserId)
         {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null || userIdClaim.Value != UserId.ToString())
+
+            {
+                return Forbid();
+            }
             try
             {
-                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-                if (userIdClaim == null && userIdClaim.Value != UserId.ToString())
-
-                {
-                    return Forbid();
-                }
                 var result = await _userBLL.GetUserById(UserId);
                 if (result == null)
                 {
                     return NotFound();
                 }
                 return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpPut("ChangePassword")]
+        public async Task<IActionResult> ChangePassword(ChangePasswordDTO changePasswordDTO)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null || userIdClaim.Value != changePasswordDTO.UserId.ToString())
+
+            {
+                return Forbid();
+            }
+            try
+            {
+                var result = await _userBLL.ChangePassword(changePasswordDTO.UserId, changePasswordDTO.oldPassword, changePasswordDTO.newPassword, changePasswordDTO.confirmPassword);
+                return Ok($"Password changed successfully");
             }
             catch (Exception ex)
             {

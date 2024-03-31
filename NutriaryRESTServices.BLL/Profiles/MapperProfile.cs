@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using NutriaryRESTServices.BLL.DTOs;
+using NutriaryRESTServices.Data.Models;
 using NutriaryRESTServices.Domain;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,7 @@ namespace NutriaryRESTServices.BLL.Profiles
             CreateMap<TotalNutritionReport, TotalNutritionReportDTO>();
             CreateMap<UserProfileWithCalorieInformation, UserProfileWithCalorieDTO>().ReverseMap();
             CreateMap<UserProfile, GetUserProfileDTO>().ReverseMap();
+            CreateMap<CalorieSummary, CalorieSummaryDTO>();
 
 
 

@@ -12,5 +12,7 @@ namespace NutriaryRESTServices.BLL.Interfaces
     {
         public Task<TotalNutritionReportDTO> GetTotalNutritionToday(int userId);
         public Task<TotalNutritionReportDTO> GetTotalNutritionByDate(int userId, DateTime date);
+        public Task<CalorieSummaryDTO> GetCalorieSummaryToday(int userId);
+        public Task<CalorieSummaryDTO> GetCalorieSummaryByDate(int userId, DateTime date);
     }
 }

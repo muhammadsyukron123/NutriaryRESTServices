@@ -21,6 +21,18 @@ namespace NutriaryRESTServices.BLL
             _mapper = mapper;
         }
 
+        public async Task<CalorieSummaryDTO> GetCalorieSummaryByDate(int userId, DateTime date)
+        {
+            var report = await _consumptionReportDAL.GetCalorieSummaryByDate(userId, date);
+            return _mapper.Map<CalorieSummaryDTO>(report);
+        }
+
+        public async Task<CalorieSummaryDTO> GetCalorieSummaryToday(int userId)
+        {
+            var report = await _consumptionReportDAL.GetCalorieSummaryToday(userId);
+            return _mapper.Map<CalorieSummaryDTO>(report);
+        }
+
         public async Task<TotalNutritionReportDTO> GetTotalNutritionByDate(int userId, DateTime date)
         {
             var report = await _consumptionReportDAL.GetTotalNutritionByDate(userId, date);

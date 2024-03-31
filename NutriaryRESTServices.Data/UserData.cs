@@ -19,6 +19,27 @@ namespace NutriaryRESTServices.Data
         {
             _context = appDbContext;
         }
+
+        public async Task<bool> ChangePassword(int userId, string oldPassword, string newPassword, string confirmPassword)
+        {
+            try
+            {
+                var parameter = new SqlParameter[]
+                {
+                    new SqlParameter("@user_id", userId),
+                    new SqlParameter("@old_password", oldPassword),
+                    new SqlParameter("@new_password", newPassword),
+                    new SqlParameter("@confirm_password", confirmPassword)
+                };
+                var result = await _context.Database.ExecuteSqlRawAsync("EXEC usp_ChangePasswordByUserId @user_id, @old_password, @new_password, @confirm_password", parameter);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("Failed to change password", ex.Message);
+            }
+        }
+
         public Task<bool> DeleteUser(int userId)
         {
             throw new NotImplementedException();
@@ -140,22 +161,14 @@ namespace NutriaryRESTServices.Data
         {
             try
             {
-                var parameter = new SqlParameter[]
-                {
-                    new SqlParameter("@username", username),
-                    new SqlParameter("@password", password)
-                };
-                var login = await _context.Database.ExecuteSqlRawAsync("EXEC usp_LoginUser @username, @password", parameter);
-                if (login == 0)
-                {
-                    throw new ArgumentException("Invalid username or password");
-                }
-                var user = await GetUserByUsername(username);
-                return user;
+                var result = await _context.Users.
+                    FromSqlRaw("EXEC usp_LoginUser {0}, {1}", username, password)
+                    .ToListAsync();
+                return result.FirstOrDefault();
             }
             catch (Exception ex)
             {
-                throw new ArgumentException("Invalid username or password", ex.Message);
+                throw new ArgumentException("Invalid username or password");
             }
         }
 

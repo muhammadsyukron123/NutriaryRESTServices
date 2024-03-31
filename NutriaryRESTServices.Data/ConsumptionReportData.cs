@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NutriaryRESTServices.Data.Interfaces;
+using NutriaryRESTServices.Data.Models;
 using NutriaryRESTServices.Domain;
 using NutriaryRESTServices.Models;
 using System;
@@ -17,6 +18,39 @@ namespace NutriaryRESTServices.Data
         public ConsumptionReportData(AppDbContext appDbContext)
         {
             _context = appDbContext;
+        }
+
+        public async Task<CalorieSummary> GetCalorieSummaryByDate(int userId, DateTime date)
+        {
+            try
+            {
+                var calorieSummary = await _context.Database
+                    .SqlQueryRaw<CalorieSummary>("EXEC usp_GetCalorieSummaryOnDate {0}, {1}", userId, date)
+                    .ToListAsync();
+
+                Console.WriteLine(calorieSummary);
+                return calorieSummary.FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<CalorieSummary> GetCalorieSummaryToday(int userId)
+        {
+            try
+            {
+                var calorieSummary = await _context.Database
+                    .SqlQueryRaw<CalorieSummary>("EXEC usp_GetCalorieSummary {0}", userId)
+                    .ToListAsync();
+                Console.WriteLine(calorieSummary);
+                return calorieSummary.FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public async Task<TotalNutritionReport> GetTotalNutritionByDate(int userId, DateTime date)
