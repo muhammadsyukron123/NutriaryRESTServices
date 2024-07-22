@@ -1,6 +1,6 @@
-# Nutriary Web App
+# Nutriary Web API
 
-This is the backend service app for Nutriary Flutter Mobile Apps, this apps using some technologies :
+This is the REST API backend service app for Nutriary Flutter Mobile Apps, this apps using some technologies :
 
 - .NET Core 8.0
 - Entity Framework
